@@ -1,0 +1,29 @@
+{% extends 'dashboard/trainer_base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet"
+href="{% static 'certificate/css/send_certificate.css' %}">
+
+<div class="form-container">
+
+    <div class="title">
+        📤 Send Certificate To Admin
+    </div>
+
+    <form method="POST"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit"
+                class="submit-btn">
+            Send For Approval
+        </button>
+
+    </form>
+
+</div>
+<script src="{% static 'certificate/js/send_certificates.js' %}"></script>
+{% endblock %}

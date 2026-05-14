@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Attendance Dashboard</h2>
+
+<p>Punch In: {{ attendance.punch_in }}</p>
+<p>Punch Out: {{ attendance.punch_out }}</p>
+<p>Total Hours: {{ attendance.total_hours }}</p>
+
+<a href="{% url 'punch_in' %}">
+    <button>✅ Punch In</button>
+</a>
+
+<a href="{% url 'punch_out' %}">
+    <button>❌ Punch Out</button>
+</a>
+
+{% endblock %}

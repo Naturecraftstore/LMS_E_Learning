@@ -1,0 +1,206 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end; /* Card on the right */
+    align-items: center;
+    padding-right: 10%;
+    /* Update path to your background image */
+    background: url("/static/accounts/images/lms.jpg") no-repeat center center;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+/* Dark Tint Overlay */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(25, 20, 80, 0.25);
+    z-index: 1;
+}
+
+/* Floating Decorative Shapes */
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    z-index: 1;
+}
+.shape1 { width: 150px; height: 150px; top: 10%; right: 35%; }
+.shape2 { width: 100px; height: 100px; bottom: 10%; right: 5%; }
+
+/* The Glass Card */
+.card {
+    width: 430px;
+    padding: 40px;
+    border-radius: 35px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    z-index: 5;
+    position: relative;
+}
+
+.card h2 {
+    color: #1b1b4b;
+    margin-bottom: 30px;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+/* Targeting your Django <p> tags and labels */
+form p {
+    margin-bottom: 18px;
+}
+
+form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1b1b4b;
+    margin-bottom: 6px;
+    margin-left: 18px;
+    text-transform: uppercase;
+}
+
+/* Auto-styling Django inputs to Pills */
+input[type="text"], 
+input[type="email"], 
+input[type="password"],
+input[type="tel"],
+form select {
+    width: 100%;
+    padding: 15px 25px;
+    border-radius: 50px;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+    color: #333;
+}
+
+input:focus {
+    background: #ffffff;
+    box-shadow: 0 0 15px rgba(91, 75, 255, 0.2);
+}
+
+/* Captcha Image Styling */
+.captcha {
+    border-radius: 15px;
+    margin: 10px 0;
+    display: block;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    width: 100%;
+    padding: 16px;
+    border-radius: 50px;
+    border: none;
+    background: #5b4bff;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 10px 20px rgba(91, 75, 255, 0.3);
+    transition: 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #4736f0;
+    transform: translateY(-2px);
+}
+
+.card a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #1b1b4b;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.errorlist {
+    color: #ff4d4d;
+    font-size: 12px;
+    list-style: none;
+    margin-left: 18px;
+    margin-top: 5px;
+}
+
+
+
+/* ... Keep your body and overlay styles the same ... */
+
+.card {
+    width: 380px; /* Made the card slightly narrower */
+    padding: 25px; /* Reduced from 40px */
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    z-index: 5;
+}
+
+.card h2 {
+    font-size: 22px; /* Smaller title */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* COMPACT INPUTS */
+form p {
+    margin-bottom: 10px; /* Reduced vertical gap between fields */
+}
+
+form label {
+    font-size: 11px; /* Smaller label text */
+    margin-bottom: 3px;
+    margin-left: 15px;
+}
+
+input[type="text"], 
+input[type="email"], 
+input[type="password"],
+input[type="tel"] {
+    padding: 10px 20px; /* Thinner pill boxes */
+    font-size: 14px;
+    border-radius: 50px;
+}
+
+/* CAPTCHA ADJUSTMENT */
+.captcha {
+    transform: scale(0.85); /* Shrinks the captcha image slightly */
+    margin: 5px 0;
+    transform-origin: left;
+}
+
+button[type="submit"] {
+    padding: 12px; /* Thinner button */
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.card a {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+
+
+

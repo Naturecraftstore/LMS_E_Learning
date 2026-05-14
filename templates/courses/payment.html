@@ -1,0 +1,26 @@
+{% extends 'dashboard/student_base.html' %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet"
+href="{% static 'courses/css/payment.css' %}">
+<div class="payment-box">
+
+    <h2>💳 Pay for {{ course.title }}</h2>
+
+    <div class="amount">
+        Amount: ₹{{ course.price }}
+    </div>
+
+    <button id="pay-btn" class="btn">
+        Pay Now
+    </button>
+
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script src="{% static 'courses/js/payment.js' %}"></script>
+{% endblock %}
