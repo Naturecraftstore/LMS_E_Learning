@@ -22,7 +22,7 @@ def course_slides(request):
 
     if user.role == 'admin':
         courses = Course.objects.all()
-        template = 'teams/admin_course_slides.html'
+        template = 'teams/course_slides.html'
 
     elif user.role == 'trainer':
         courses = Course.objects.filter(trainer=user)

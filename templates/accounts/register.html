@@ -1,203 +1,249 @@
-<!-- <h2>Student Register</h2>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
-
-<a href="{% url 'login' %}">Already have account? Login</a> -->
-
-
-<!-- <h2>Student Register</h2>
-
-<form method="post">
-    {% csrf_token %}
-
-    {{ form.non_field_errors }}
-
-    <p>
-        {{ form.username.label }}<br>
-        {{ form.username }}
-        {{ form.username.errors }}
-    </p>
-
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email }}
-        {{ form.email.errors }}
-    </p>
-
-    <p>
-        {{ form.phone.label }}<br>
-        {{ form.phone }}
-        {{ form.phone.errors }}
-    </p>
-
-    <p>
-        {{ form.password1.label }}<br>
-        {{ form.password1 }}
-        {{ form.password1.errors }}
-    </p>
-
-    <p>
-        {{ form.password2.label }}<br>
-        {{ form.password2 }}
-        {{ form.password2.errors }}
-    </p>
-
-    <p>
-        {{ form.captcha.label }}<br>
-        {{ form.captcha }}
-        {{ form.captcha.errors }}
-    </p>
-
-    <button type="submit">Register</button>
-</form>
-
-<a href="{% url 'login' %}">Already have account? Login</a> -->
-
-
-
-
-<!-- 
 {% load static %}
-<link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
-
-<div class="auth-container">
-
-    <div class="auth-image">
-        <img src="{% static 'accounts/images/lms.png' %}">
-    </div>
-
-    <div class="auth-form">
-        <h2>Register</h2>
-
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button class="button">Register</button>
-        </form>
-
-        <a href="{% url 'login' %}">Login</a>
-    </div>
-
-</div> -->
-
-
-
-
-
-<!-- {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        .field-container{
+            position: relative;
+        }
+
+        /* Eye Icon */
+        .toggle-password{
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            z-index: 10;
+        }
+
+        /* Space for eye icon */
+        input[type="password"],
+        input[type="text"]{
+            width: 100%;
+            padding-right: 45px;
+            box-sizing: border-box;
+        }
+
+        /* CAPTCHA */
+        .captcha-row{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .captcha-box img{
+            border-radius: 10px;
+            transform: scale(0.85);
+            transform-origin: left center;
+        }
+
+        .captcha-refresh-btn{
+            border: none;
+            background: #007bff;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .captcha-refresh-btn:hover{
+            background: #0056b3;
+        }
+
+        /* Button */
+        button[type="submit"]{
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            border: none;
+            background: #5b4bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover{
+            background: #4736f0;
+        }
+
+    </style>
+
 </head>
+
 <body>
+
     <div class="overlay"></div>
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
 
     <div class="card">
-        <h2>Student Register</h2>
+
+        <h2>Register</h2>
+
         <form method="post">
             {% csrf_token %}
             {{ form.non_field_errors }}
 
+            <!-- Username -->
             <p>
-                {{ form.username.label_tag }}
+                <label>Username</label>
                 {{ form.username }}
                 {{ form.username.errors }}
             </p>
 
+            <!-- Email -->
             <p>
-                {{ form.email.label_tag }}
+                <label>Email</label>
                 {{ form.email }}
                 {{ form.email.errors }}
             </p>
 
+            <!-- Phone -->
             <p>
-                {{ form.phone.label_tag }}
+                <label>Phone</label>
                 {{ form.phone }}
                 {{ form.phone.errors }}
             </p>
 
+            <!-- Password -->
             <p>
-                {{ form.password1.label_tag }}
-                {{ form.password1 }}
+                <label>Password</label>
+
+                <div class="field-container">
+                    {{ form.password1 }}
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+
                 {{ form.password1.errors }}
             </p>
 
+            <!-- Confirm Password -->
             <p>
-                {{ form.password2.label_tag }}
-                {{ form.password2 }}
+                <label>Confirm Password</label>
+
+                <div class="field-container">
+                    {{ form.password2 }}
+                    <i class="fas fa-eye toggle-password"></i>
+                </div>
+
                 {{ form.password2.errors }}
             </p>
 
-            <p>
-                {{ form.captcha.label_tag }}
-                {{ form.captcha }}
-                {{ form.captcha.errors }}
-            </p>
+            <!-- CAPTCHA -->
+            <div class="captcha-row">
+
+                <div class="captcha-box">
+                    {{ form.captcha }}
+                </div>
+
+                <button type="button"
+                        class="captcha-refresh-btn"
+                        title="Refresh Captcha">
+
+                    <i class="fas fa-rotate-right"></i>
+
+                </button>
+
+            </div>
+
+            {{ form.captcha.errors }}
 
             <button type="submit">Register</button>
+
         </form>
-        <a href="{% url 'login' %}">Already have account? Login</a>
+
+        <a href="{% url 'login' %}">
+            Already have account? Login
+        </a>
+
     </div>
-</body>
-</html> -->
 
+    <!-- PASSWORD TOGGLE SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="{% static 'accounts/css/auth.css' %}">
-</head>
-<body>
-    <div class="overlay"></div>
+            const toggles =
+                document.querySelectorAll('.toggle-password');
 
-    <div class="card">
-        <h2>Register</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
+            toggles.forEach(function(btn){
 
-            <p>
-                <label>Username</label>
-                {{ form.username }}
-            </p>
+                btn.addEventListener('click', function(){
 
-            <p>
-                <label>Email</label>
-                {{ form.email }}
-            </p>
+                    const input =
+                        this.parentElement.querySelector('input');
 
-            <p>
-                <label>Phone</label>
-                {{ form.phone }}
-            </p>
+                    if(!input) return;
 
-            <p>
-                <label>Password</label>
-                {{ form.password1 }}
-            </p>
+                    const type =
+                        input.type === 'password'
+                        ? 'text'
+                        : 'password';
 
-            <p>
-                <label>Confirm</label>
-                {{ form.password2 }}
-            </p>
+                    input.type = type;
 
-            <p class="captcha-p">
-                <label>Captcha</label>
-                {{ form.captcha }}
-            </p>
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
 
-            <button type="submit">Register</button>
-        </form>
-        <a href="{% url 'login' %}">Already have account? Login</a>
-    </div>
+                });
+
+            });
+
+        });
+    </script>
+
+    <!-- CAPTCHA REFRESH SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const refreshBtn =
+                document.querySelector('.captcha-refresh-btn');
+
+            if(refreshBtn){
+
+                refreshBtn.addEventListener('click', function(){
+
+                    fetch('/captcha/refresh/', {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        const img =
+                            document.querySelector('img.captcha');
+
+                        if(img){
+                            img.src = data.image_url;
+                        }
+
+                        document.getElementById('id_captcha_0').value = data.key;
+                        document.getElementById('id_captcha_1').value = '';
+
+                    })
+                    .catch(err => console.log(err));
+
+                });
+
+            }
+
+        });
+    </script>
+
 </body>
 </html>

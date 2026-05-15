@@ -34,9 +34,7 @@ Assigned Courses
                 👨‍🏫 {{ course.trainer.username }}
             </p>
 
-            <a href="{% url 'course_detail' course.id %}">
-                View Course
-            </a>
+            <a href="{% url 'assigned_course_detail' course.id %}"class="view-btn">📖 View Course</a>
 
         </div>
 

@@ -34,5 +34,11 @@ urlpatterns = [
     # path('certificate/view/<int:id>/',views.view_certificate,name='view_certificate'),
     # path('certificate/download/<int:id>/',views.download_certificate,name='download_certificate'),
     path('assigned-courses/', views.assigned_courses, name='assigned_courses'),
+    path('topic/<int:id>/', views.view_topic, name='view_topic'),
+    path(
+    'assigned-course/<int:id>/',
+    views.assigned_course_detail,
+    name='assigned_course_detail'
+),
 
 ]

@@ -11,7 +11,8 @@ from django.utils.timezone import now
 from datetime import timedelta
 import base64
 import requests
-
+import csv
+from django.http import HttpResponse
 from accounts.models import User
 from .models import Attendance, Break, LocationLog
 
@@ -409,3 +410,54 @@ def admin_attendance(request):
         'dates':         json.dumps(dates),
         'hours':         json.dumps(hours),
     })
+
+
+
+@login_required
+def export_attendance_csv(request):
+    user = request.user
+    scope = request.GET.get('scope', 'self')  # options: 'self', 'students', 'admin_all'
+    
+    # Base Queryset
+    records = Attendance.objects.all()
+
+    # Permission-based filtering
+    if scope == 'admin_all':
+        # Apply filters from Admin Dashboard
+        date_query = request.GET.get('date')
+        user_query = request.GET.get('user')
+        if date_query:
+            records = records.filter(date=date_query)
+        if user_query:
+            records = records.filter(user_username_icontains=user_query)
+    elif scope == 'students' and user.role == 'trainer':
+        # Trainer's assigned students
+        records = records.filter(user__trainer=user)
+    else:
+        # Default: Export current user's own records
+        records = records.filter(user=user)
+
+    records = records.order_by('-date', '-login_time')
+
+    # Create CSV Response
+    response = HttpResponse(content_type='text/csv')
+    filename = f"attendance_{scope}_{timezone.now().date()}.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Username', 'Date', 'Login Time', 'Logout Time', 'Work Hours', 'Break Hours', 'Status', 'Location'])
+
+    for r in records:
+        status = "Present" if (r.logout_time and r.total_hours >= 4) else "Absent"
+        writer.writerow([
+            r.user.username,
+            r.date,
+            r.login_time.strftime("%H:%M:%S") if r.login_time else "-",
+            r.logout_time.strftime("%H:%M:%S") if r.logout_time else "-",
+            r.total_hours,
+            round(r.break_hours, 2),
+            status,
+            r.location_name or "N/A"
+        ])
+
+    return response

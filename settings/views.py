@@ -1,8 +1,9 @@
-# views.py
+# settings/views.py
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import activate
+from django.contrib import messages
 
 from .models import UserSettings
 
@@ -10,6 +11,7 @@ from .models import UserSettings
 # =========================================
 # MAIN SETTINGS PAGE
 # =========================================
+
 @login_required
 def settings_page(request):
 
@@ -19,18 +21,20 @@ def settings_page(request):
 
     if request.method == "POST":
 
-        # SAVE LANGUAGE
+        # LANGUAGE
+
         language = request.POST.get("language")
 
         if language:
 
             settings_obj.language = language
 
-            request.session['django_language'] = language
+            request.session["django_language"] = language
 
             activate(language)
 
-        # SAVE SETTINGS
+        # SETTINGS
+
         settings_obj.dark_mode = (
             request.POST.get("dark_mode") == "on"
         )
@@ -73,6 +77,11 @@ def settings_page(request):
 
         settings_obj.save()
 
+        messages.success(
+            request,
+            "Settings updated successfully."
+        )
+
         return redirect("settings_page")
 
     return render(
@@ -87,6 +96,7 @@ def settings_page(request):
 # =========================================
 # TRAINER SETTINGS
 # =========================================
+
 @login_required
 def trainer_settings(request):
 
@@ -105,33 +115,84 @@ def trainer_settings(request):
         # USER DETAILS
         # =====================================
 
-        user.username = request.POST.get("username")
-        user.email = request.POST.get("email")
-        user.phone = request.POST.get("phone")
+        user.username = request.POST.get(
+            "username",
+            ""
+        )
+
+        user.email = request.POST.get(
+            "email",
+            ""
+        )
+
+        user.phone = request.POST.get(
+            "phone",
+            ""
+        )
 
         user.specialization = request.POST.get(
-            "specialization"
+            "specialization",
+            ""
         )
 
         user.experience = request.POST.get(
-            "experience"
+            "experience",
+            ""
         )
 
         user.qualification = request.POST.get(
-            "qualification"
+            "qualification",
+            ""
         )
 
         user.gender = request.POST.get(
-            "gender"
+            "gender",
+            ""
         )
 
-        user.bio = request.POST.get(
-            "bio"
-        )
+        dob = request.POST.get("dob")
+
+        if dob:
+            user.dob = dob
+        else:
+            user.dob = None
 
         user.address = request.POST.get(
-            "address"
+            "address",
+            ""
         )
+
+        # =====================================
+        # BIO
+        # =====================================
+
+        bio = request.POST.get(
+            "bio",
+            ""
+        ).strip()
+
+        word_count = len(
+            bio.split()
+        )
+
+        if word_count < 120 or word_count > 150:
+
+            messages.error(
+                request,
+                "Professional Bio must contain 120 to 150 words only."
+            )
+
+            return render(
+                request,
+                "settings/trainer_settings.html",
+                {
+                    "user": user,
+                    "settings_obj": settings_obj,
+                    "languages": UserSettings.LANGUAGE_CHOICES
+                }
+            )
+
+        user.bio = bio
 
         # =====================================
         # PROFILE IMAGE
@@ -143,19 +204,27 @@ def trainer_settings(request):
                 "profile_image"
             )
 
+        # =====================================
+        # SAVE USER
+        # =====================================
+
         user.save()
 
         # =====================================
         # LANGUAGE
         # =====================================
 
-        language = request.POST.get("language")
+        language = request.POST.get(
+            "language"
+        )
 
         if language:
 
             settings_obj.language = language
 
-            request.session["django_language"] = language
+            request.session[
+                "django_language"
+            ] = language
 
             activate(language)
 
@@ -164,32 +233,57 @@ def trainer_settings(request):
         # =====================================
 
         settings_obj.dark_mode = (
-            request.POST.get("dark_mode") == "on"
+            request.POST.get(
+                "dark_mode"
+            ) == "on"
         )
 
         settings_obj.email_notifications = (
-            request.POST.get("email_notifications") == "on"
+            request.POST.get(
+                "email_notifications"
+            ) == "on"
         )
 
         settings_obj.push_notifications = (
-            request.POST.get("push_notifications") == "on"
+            request.POST.get(
+                "push_notifications"
+            ) == "on"
         )
 
         settings_obj.two_factor_auth = (
-            request.POST.get("two_factor_auth") == "on"
+            request.POST.get(
+                "two_factor_auth"
+            ) == "on"
         )
 
         settings_obj.live_class_reminders = (
-            request.POST.get("live_class_reminders") == "on"
+            request.POST.get(
+                "live_class_reminders"
+            ) == "on"
         )
 
         settings_obj.allow_chat = (
-            request.POST.get("allow_chat") == "on"
+            request.POST.get(
+                "allow_chat"
+            ) == "on"
+        )
+
+        settings_obj.allow_discussions = (
+            request.POST.get(
+                "allow_discussions"
+            ) == "on"
         )
 
         settings_obj.save()
 
-        return redirect("trainer_settings")
+        messages.success(
+            request,
+            "Trainer profile updated successfully."
+        )
+
+        return redirect(
+            "trainer_settings"
+        )
 
     return render(
         request,
@@ -205,6 +299,7 @@ def trainer_settings(request):
 # =========================================
 # STUDENT SETTINGS
 # =========================================
+
 @login_required
 def student_settings(request):
 
@@ -223,20 +318,36 @@ def student_settings(request):
         # USER DETAILS
         # =====================================
 
-        user.username = request.POST.get("username")
-        user.email = request.POST.get("email")
-        user.phone = request.POST.get("phone")
+        user.username = request.POST.get(
+            "username",
+            ""
+        )
+
+        user.email = request.POST.get(
+            "email",
+            ""
+        )
+
+        user.phone = request.POST.get(
+            "phone",
+            ""
+        )
 
         user.gender = request.POST.get(
-            "gender"
+            "gender",
+            ""
         )
 
-        user.dob = request.POST.get(
-            "dob"
-        )
+        dob = request.POST.get("dob")
+
+        if dob:
+            user.dob = dob
+        else:
+            user.dob = None
 
         user.address = request.POST.get(
-            "address"
+            "address",
+            ""
         )
 
         # =====================================
@@ -249,19 +360,27 @@ def student_settings(request):
                 "profile_image"
             )
 
+        # =====================================
+        # SAVE USER
+        # =====================================
+
         user.save()
 
         # =====================================
         # LANGUAGE
         # =====================================
 
-        language = request.POST.get("language")
+        language = request.POST.get(
+            "language"
+        )
 
         if language:
 
             settings_obj.language = language
 
-            request.session["django_language"] = language
+            request.session[
+                "django_language"
+            ] = language
 
             activate(language)
 
@@ -270,32 +389,57 @@ def student_settings(request):
         # =====================================
 
         settings_obj.dark_mode = (
-            request.POST.get("dark_mode") == "on"
+            request.POST.get(
+                "dark_mode"
+            ) == "on"
         )
 
         settings_obj.email_notifications = (
-            request.POST.get("email_notifications") == "on"
+            request.POST.get(
+                "email_notifications"
+            ) == "on"
         )
 
         settings_obj.push_notifications = (
-            request.POST.get("push_notifications") == "on"
+            request.POST.get(
+                "push_notifications"
+            ) == "on"
         )
 
         settings_obj.two_factor_auth = (
-            request.POST.get("two_factor_auth") == "on"
+            request.POST.get(
+                "two_factor_auth"
+            ) == "on"
         )
 
         settings_obj.live_class_reminders = (
-            request.POST.get("live_class_reminders") == "on"
+            request.POST.get(
+                "live_class_reminders"
+            ) == "on"
         )
 
         settings_obj.allow_chat = (
-            request.POST.get("allow_chat") == "on"
+            request.POST.get(
+                "allow_chat"
+            ) == "on"
+        )
+
+        settings_obj.allow_discussions = (
+            request.POST.get(
+                "allow_discussions"
+            ) == "on"
         )
 
         settings_obj.save()
 
-        return redirect("student_settings")
+        messages.success(
+            request,
+            "Student profile updated successfully."
+        )
+
+        return redirect(
+            "student_settings"
+        )
 
     return render(
         request,

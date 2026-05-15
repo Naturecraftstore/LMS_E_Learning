@@ -383,22 +383,108 @@ def assigned_courses(request):
         'search_query': search_query
     })
 # =====================================
-# COURSE DETAIL
+# ASSIGNED COURSE DETAIL
 # =====================================
 @login_required
+def assigned_course_detail(request, id):
+
+    if request.user.role != "student":
+        return redirect("login")
+
+    course = get_object_or_404(
+        Course,
+        id=id
+    )
+
+    # only assigned students can open
+    if course not in request.user.courses.all():
+
+        return redirect(
+            'assigned_course_details'
+        )
+
+    topics = Topic.objects.filter(
+        course=course
+    ).order_by('-id')
+
+    return render(
+        request,
+        'courses/assigned_course_detail.html',
+        {
+            'course': course,
+            'topics': topics
+        }
+    )
+# =====================================
+# COURSE DETAIL
+# =====================================
+
+@login_required
 def course_detail(request, id):
-    course = get_object_or_404(Course, id=id)
 
-    is_purchased = Payment.objects.filter(
-        student=request.user,
-        course=course,
-        payment_status='success'
-    ).exists()
+    course = get_object_or_404(
+        Course,
+        id=id
+    )
 
-    return render(request, 'courses/course_detail.html', {
-        'course': course,
-        'is_purchased': is_purchased
-    })
+    # =========================
+    # ADMIN
+    # =========================
+    if request.user.role == "admin":
+
+        return render(
+            request,
+            'courses/course_detail.html',
+            {
+                'course': course
+            }
+        )
+
+    # =========================
+    # TRAINER
+    # =========================
+    elif request.user.role == "trainer":
+
+        if course.trainer != request.user:
+            return redirect("trainer_courses")
+
+        return render(
+            request,
+            'courses/course_detail.html',
+            {
+                'course': course
+            }
+        )
+
+    # =========================
+    # STUDENT
+    # =========================
+    elif request.user.role == "student":
+
+        # assigned course access
+        is_assigned = course in request.user.courses.all()
+
+        # paid/enrolled access
+        is_enrolled = course in request.user.enrolled_courses.all()
+
+        # if neither assigned nor enrolled
+        if not is_assigned and not is_enrolled:
+            return redirect("assigned_courses")
+
+        topics = Topic.objects.filter(
+            course=course
+        ).order_by('-id')
+
+        return render(
+            request,
+            'courses/assigned_course_detail.html',
+            {
+                'course': course,
+                'topics': topics,
+                'is_enrolled': is_enrolled
+            }
+        )
+    return redirect("login")
 
 
 # =====================================
@@ -651,3 +737,7 @@ def razorpay_webhook(request):
 #     return render(request, 'students/certificates.html', {
 #         'certificates': certificates
 #     })
+
+def view_topic(request, id):
+    topic = Topic.objects.get(id=id)
+    return render(request, 'courses/view_topic.html', {'topic': topic})

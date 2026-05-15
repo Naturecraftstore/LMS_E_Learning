@@ -241,12 +241,17 @@ body {
 </div>
 
 <!-- FILTER -->
-<div class="filter-box">
+    <div class="filter-box">
     <form method="GET">
         <input type="date" name="date">
         <input type="text" name="user" placeholder="Search User">
         <button type="submit">Filter</button>
+        <a href="{% url 'export_attendance_csv' %}?scope=admin_all&date={{ request.GET.date }}&user={{ request.GET.user }}" 
+           class="view-btn" style="background:#dc3545; text-decoration:none; margin-left:10px;">
+           📥 Export CSV
+        </a>
     </form>
+
 </div>
 
 <!-- TABLE -->

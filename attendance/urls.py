@@ -20,7 +20,7 @@ urlpatterns = [
     path('latest-location/', views.latest_location, name='latest_location'),
     path('attendance-data/', views.attendance_data, name='attendance_data'),
     path('prediction/', views.attendance_prediction, name='attendance_prediction'),
-
+    path('attendance/export/', views.export_attendance_csv, name='export_attendance_csv'),
     # ✅ NEW — admin fetch any user's latest location for the modal map
     path('user-location/<int:user_id>/', views.user_location, name='user_location'),
 ]

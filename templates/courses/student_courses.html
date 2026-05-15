@@ -54,11 +54,42 @@
                 </div>
 
                 <!-- OPEN BUTTON -->
-                <a href="{% url 'course_detail' course.id %}" class="open-btn">
-                    📖 Open Course
-                </a>
+               
 
-                <!-- COURSE VIDEO -->
+                    {% if course in enrolled_courses %}
+
+                    <!-- ENROLLED -->
+                    <a href="{% url 'assigned_courses' %}"
+                    class="open-btn">
+
+                        📖 Open Course
+
+                    </a>
+
+                {% else %}
+
+                    <!-- NOT ENROLLED -->
+                    {% if course.course_type == 'paid' %}
+
+                        <a href="{% url 'create_payment' course.id %}"
+                        class="open-btn">
+
+                            💳 Buy Course
+
+                        </a>
+
+                    {% else %}
+
+                        <a href="{% url 'course_detail' course.id %}"
+                        class="open-btn">
+
+                            📖 View Free Course
+
+                        </a>
+
+                    {% endif %}
+{% endif %}      
+          <!-- COURSE VIDEO -->
                 {% if course.video %}
                 <video controls>
                     <source src="{{ course.video.url }}">

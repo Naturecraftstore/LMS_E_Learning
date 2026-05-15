@@ -279,10 +279,14 @@
 
     <!-- ASSIGNED STUDENTS -->
     <div class="card">
+      
       <div class="card-title"><span>👨‍🎓</span> Assigned Students Attendance</div>
-      <div class="search-wrap">
-        <input type="text" id="searchInput" placeholder="Search student…" onkeyup="searchStudent()">
-      </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div class="search-wrap" style="margin-bottom:0;">
+            <input type="text" id="searchInput" placeholder="Search student…" onkeyup="searchStudent()">
+        </div>
+        <a href="{% url 'export_attendance_csv' %}?scope=students" class="btn btn-blue btn-sm">📥 Export Students CSV</a>
+    </div>
       <div class="tbl-wrap">
         <table id="studentTable">
           <thead>

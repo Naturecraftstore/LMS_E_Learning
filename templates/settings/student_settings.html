@@ -62,6 +62,7 @@ body{
     cursor:pointer;
     font-weight:600;
     border:1px solid #bfdbfe;
+    display:inline-block;
 }
 
 .form-grid{
@@ -87,6 +88,14 @@ body{
     padding:14px;
     border:1px solid #d1d5db;
     border-radius:12px;
+    outline:none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,0.1);
 }
 
 .full-width{
@@ -116,6 +125,28 @@ body{
     margin-top:30px;
 }
 
+.save-btn:hover{
+    background:#1d4ed8;
+}
+
+.success-msg{
+    background:#dcfce7;
+    color:#166534;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.error-msg{
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
 @media(max-width:768px){
 
     .settings-box{
@@ -143,22 +174,49 @@ body{
 
     </div>
 
+    <!-- SUCCESS / ERROR MESSAGE -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="
+                {% if message.tags == 'error' %}
+                    error-msg
+                {% else %}
+                    success-msg
+                {% endif %}
+            ">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
     <form method="POST"
           enctype="multipart/form-data">
 
         {% csrf_token %}
 
         <!-- PROFILE -->
+
         <div class="profile-section">
 
             {% if user.profile_image %}
+
                 <img src="{{ user.profile_image.url }}"
                      class="profile-image"
                      id="previewImage">
+
             {% else %}
+
                 <img src="{% static 'images/default-user.png' %}"
                      class="profile-image"
                      id="previewImage">
+
             {% endif %}
 
             <label class="upload-btn">
@@ -174,7 +232,11 @@ body{
 
         </div>
 
+        <!-- FORM -->
+
         <div class="form-grid">
+
+            <!-- USERNAME -->
 
             <div class="form-group">
 
@@ -182,9 +244,12 @@ body{
 
                 <input type="text"
                        name="username"
-                       value="{{ user.username }}">
+                       value="{{ user.username }}"
+                       required>
 
             </div>
+
+            <!-- EMAIL -->
 
             <div class="form-group">
 
@@ -192,9 +257,12 @@ body{
 
                 <input type="email"
                        name="email"
-                       value="{{ user.email }}">
+                       value="{{ user.email }}"
+                       required>
 
             </div>
+
+            <!-- PHONE -->
 
             <div class="form-group">
 
@@ -206,6 +274,8 @@ body{
 
             </div>
 
+            <!-- DOB -->
+
             <div class="form-group">
 
                 <label>Date of Birth</label>
@@ -215,6 +285,8 @@ body{
                        value="{{ user.dob|date:'Y-m-d' }}">
 
             </div>
+
+            <!-- GENDER -->
 
             <div class="form-group">
 
@@ -252,6 +324,8 @@ body{
 
             </div>
 
+            <!-- LANGUAGE -->
+
             <div class="form-group">
 
                 <label>Language</label>
@@ -274,6 +348,8 @@ body{
 
             </div>
 
+            <!-- ADDRESS -->
+
             <div class="form-group full-width">
 
                 <label>Address</label>
@@ -285,34 +361,8 @@ body{
 
         </div>
 
-        <!-- SETTINGS -->
 
-        <!-- <div class="switch-row">
-            <label>🌙 Dark Mode</label>
-            <input type="checkbox"
-                   name="dark_mode"
-                   {% if settings_obj.dark_mode %}
-                   checked
-                   {% endif %}>
-        </div>
-
-        <div class="switch-row">
-            <label>📧 Email Notifications</label>
-            <input type="checkbox"
-                   name="email_notifications"
-                   {% if settings_obj.email_notifications %}
-                   checked
-                   {% endif %}>
-        </div>
-
-        <div class="switch-row">
-            <label>🔔 Push Notifications</label>
-            <input type="checkbox"
-                   name="push_notifications"
-                   {% if settings_obj.push_notifications %}
-                   checked
-                   {% endif %}>
-        </div> -->
+        <!-- SAVE -->
 
         <button type="submit"
                 class="save-btn">
